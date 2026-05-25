@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllBooks, getBook, getRelatedBooks } from "@/lib/mdx";
 import BookCover from "@/components/BookCover";
+import BookAuthor from "@/components/BookAuthor";
 import BookCard from "@/components/BookCard";
 import MdxContent from "@/components/MdxContent";
 
@@ -70,7 +71,10 @@ export default async function BookDetailPage({ params, searchParams }: Props) {
           <h1 className="text-xl font-bold tracking-tight leading-snug mb-1">
             {book.title}
           </h1>
-          <p className="text-sm text-gray-400 mb-3">{book.author}</p>
+          {book.author
+            ? <p className="text-sm text-gray-400 mb-3">{book.author}</p>
+            : <BookAuthor title={book.title} />
+          }
           <StarRating rating={book.rating} />
           <p className="text-sm text-gray-500 mt-3 leading-relaxed">
             {book.oneLineSummary}

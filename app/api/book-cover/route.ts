@@ -24,9 +24,12 @@ export async function GET(request: NextRequest) {
     if (!res.ok) return NextResponse.json({ imageUrl: null });
 
     const data = await res.json();
-    const imageUrl = data.items?.[0]?.image ?? null;
+    const item = data.items?.[0] ?? null;
+    const imageUrl = item?.image ?? null;
+    const author = item?.author ?? null;
+    const publisher = item?.publisher ?? null;
 
-    return NextResponse.json({ imageUrl });
+    return NextResponse.json({ imageUrl, author, publisher });
   } catch {
     return NextResponse.json({ imageUrl: null });
   }
