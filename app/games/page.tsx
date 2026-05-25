@@ -42,7 +42,7 @@ export default function GamesPage() {
         <div className="py-20 text-center">
           <p className="text-3xl mb-4">🎮</p>
           <p className="text-sm text-gray-400">아직 리뷰가 없습니다.</p>
-          <p className="text-xs text-gray-300 mt-1">첫 번째 개암 리뷰를 기다려주세요!</p>
+          <p className="text-xs text-gray-300 mt-1">첫 번째 게임 리뷰를 기다려주세요!</p>
         </div>
       ) : (
         <div>

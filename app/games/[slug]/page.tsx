@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { getAllGames, getGame } from "@/lib/mdx";
 import MdxContent from "@/components/MdxContent";
 
@@ -51,25 +50,11 @@ export default async function GameDetailPage({ params }: Props) {
         href="/games"
         className="text-xs text-gray-400 hover:text-gray-700 transition-colors mb-8 inline-block"
       >
-        ← 개암 리뷰로
+        ← 게임 리뷰로
       </Link>
 
       <header className="mb-10">
         <p className="text-xs text-gray-300 mb-3 tracking-widest uppercase">🎮 Game Review</p>
-
-        {/* 썸네일 이미지 */}
-        {game.image && (
-          <div className="w-full h-48 rounded-xl overflow-hidden bg-gray-100 mb-6">
-            <Image
-              src={game.image}
-              alt={game.title}
-              width={672}
-              height={192}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
-
         <h1 className="text-2xl font-bold tracking-tight leading-snug mb-3">
           {game.title}
         </h1>
