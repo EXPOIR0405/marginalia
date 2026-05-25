@@ -96,8 +96,12 @@ export default async function BookDetailPage({ params, searchParams }: Props) {
           </div>
           <p className="text-xs mt-3 flex flex-wrap items-center gap-x-2">
             <span className="text-gray-300">{formatDate(book.readDate)} 읽음</span>
-            <span className="text-gray-200">·</span>
-            <span className="text-gray-500">노트 약 {getReadingTime(book.content)}분</span>
+            {book.content.trim() && (
+              <>
+                <span className="text-gray-200">·</span>
+                <span className="text-gray-500">노트 약 {getReadingTime(book.content)}분</span>
+              </>
+            )}
             {book.essayContent && (
               <>
                 <span className="text-gray-200">·</span>
@@ -136,7 +140,15 @@ export default async function BookDetailPage({ params, searchParams }: Props) {
 
       {/* 콘텐츠 */}
       <article>
-        {activeTab === "note" && <MdxContent source={book.content} />}
+        {activeTab === "note" && (
+          book.content.trim()
+            ? <MdxContent source={book.content} />
+            : (
+              <p className="text-sm text-gray-300 py-8">
+                노트를 작성 중이에요. 조금만 기다려 주세요 :)
+              </p>
+            )
+        )}
         {activeTab === "essay" && book.essayContent && (
           <MdxContent source={book.essayContent} />
         )}

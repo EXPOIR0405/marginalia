@@ -54,7 +54,18 @@ export function getAllBooks(): BookMeta[] {
     const filePath = path.join(booksDir, slug, "index.mdx");
     const raw = fs.readFileSync(filePath, "utf-8");
     const { data } = matter(raw);
-    return { slug, ...data } as BookMeta;
+    return {
+      slug,
+      title: data.title ?? slug,
+      author: data.author ?? "",
+      readDate: data.readDate ?? new Date().toISOString().slice(0, 10),
+      isbn: data.isbn,
+      tags: data.tags ?? [],
+      rating: data.rating ?? 0,
+      oneLineSummary: data.oneLineSummary ?? "",
+      recommend: data.recommend ?? false,
+      hasEssay: data.hasEssay ?? false,
+    } satisfies BookMeta;
   });
 
   return books.sort(
@@ -78,7 +89,20 @@ export function getBook(slug: string): Book | null {
     essayContent = ec;
   }
 
-  return { slug, ...data, content, essayContent } as Book;
+  return {
+    slug,
+    title: data.title ?? slug,
+    author: data.author ?? "",
+    readDate: data.readDate ?? new Date().toISOString().slice(0, 10),
+    isbn: data.isbn,
+    tags: data.tags ?? [],
+    rating: data.rating ?? 0,
+    oneLineSummary: data.oneLineSummary ?? "",
+    recommend: data.recommend ?? false,
+    hasEssay: data.hasEssay ?? false,
+    content,
+    essayContent,
+  } satisfies Book;
 }
 
 export function getRelatedBooks(currentSlug: string, tags: string[]): BookMeta[] {

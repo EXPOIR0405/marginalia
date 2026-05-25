@@ -5,7 +5,7 @@ import ReadingHeatmap from "@/components/ReadingHeatmap";
 
 export const metadata: Metadata = {
   title: "주인장",
-  description: "주인장에 대한 소개 페이지입니다.",
+  description: "읽고, 쓰고, 만드는 PM — 강민정의 소개 페이지입니다.",
 };
 
 export default function AboutPage() {
@@ -102,19 +102,41 @@ export default function AboutPage() {
       <ReadingHeatmap />
 
       {/* 연락 */}
-      <section>
+      <section className="mt-8">
         <h2 className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4">
           Contact
         </h2>
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-gray-600 leading-relaxed mb-3">
           책 추천이나 이야기를 나누고 싶다면 편하게 연락 주세요.
         </p>
-        <a
-          href="mailto:rkdalswjd0405@gmail.com"
-          className="inline-block mt-3 text-sm text-gray-900 border-b border-gray-300 hover:border-gray-900 transition-colors pb-0.5"
-        >
-          rkdalswjd0405@gmail.com
-        </a>
+        <div className="flex flex-col gap-2">
+          <a
+            href="mailto:rkdalswjd0405@gmail.com"
+            className="inline-block text-sm text-gray-900 border-b border-gray-300 hover:border-gray-900 transition-colors pb-0.5 w-fit"
+          >
+            rkdalswjd0405@gmail.com
+          </a>
+          <a
+            href="https://www.linkedin.com/in/minjeong-kang-7a2b26286/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-sm text-gray-900 border-b border-gray-300 hover:border-gray-900 transition-colors pb-0.5 w-fit"
+          >
+            LinkedIn →
+          </a>
+        </div>
+      </section>
+
+      {/* Built */}
+      <section className="mt-12 pt-8 border-t border-gray-100">
+        <h2 className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-3">
+          Built
+        </h2>
+        <p className="text-sm text-gray-500 leading-relaxed">
+          이 서재는 직접 설계하고 개발했습니다.{" "}
+          <span className="text-gray-700 font-medium">Next.js · TypeScript · Tailwind CSS · MDX</span>
+          으로 만들었고, Vercel로 배포해요. 새 글은 MDX 파일을 추가하고 GitHub에 push하면 자동으로 반영돼요.
+        </p>
       </section>
     </div>
   );

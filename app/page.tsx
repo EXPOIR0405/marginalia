@@ -5,19 +5,51 @@ import { getAllBooks, getAllWritings } from "@/lib/mdx";
 
 export default function HomePage() {
   const books = getAllBooks().slice(0, 3);
-  const writings = getAllWritings().slice(0, 3);
+  const allWritings = getAllWritings();
+
+  // 주니어 PM 시리즈 고정 노출
+  const featuredSeries = allWritings
+    .filter((w) => w.series === "주니어 PM으로 살아남기")
+    .sort((a, b) => (a.episode ?? 0) - (b.episode ?? 0))
+    .slice(0, 3);
+
+  // 시리즈 글 제외한 최근 연재
+  const recentWritings = allWritings
+    .filter((w) => w.series !== "주니어 PM으로 살아남기")
+    .slice(0, 3);
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
       {/* 인트로 */}
       <section className="mb-16">
         <p className="text-xs text-gray-400 mb-3 tracking-widest uppercase">Marginalia</p>
-        <h1 className="text-2xl font-bold tracking-tight mb-4">서재에 오신걸 환영합니다</h1>
+        <h1 className="text-2xl font-bold tracking-tight mb-2">읽고, 쓰고, 만드는 PM</h1>
         <p className="text-gray-500 leading-relaxed text-[15px]">
-          읽은 책, 쓴 글, 그리고 그 사이에서 피어난 생각들을 모아두는 곳입니다.
-          책이 남긴 밑줄과 질문들, 그리고 때로는 책과 무관하게 흘러가는 글들을 이곳에 쌓일 예정입니다.
+          책이 남긴 밑줄과 질문들, 그리고 일하며 배운 것들을 이곳에 쌓아요.
         </p>
       </section>
+
+      {/* Featured — 주니어 PM으로 살아남기 */}
+      {featuredSeries.length > 0 && (
+        <section className="mb-16">
+          <div className="flex items-center justify-between mb-1">
+            <div>
+              <h2 className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                Featured Series
+              </h2>
+              <p className="text-[13px] text-gray-500 mt-0.5">주니어 PM으로 살아남기</p>
+            </div>
+            <Link href="/writings" className="text-xs text-gray-400 hover:text-gray-700 transition-colors">
+              전체 보기 →
+            </Link>
+          </div>
+          <div className="mt-3">
+            {featuredSeries.map((w) => (
+              <WritingCard key={w.slug} writing={w} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* 최근 읽은 책 */}
       <section className="mb-16">
@@ -38,8 +70,8 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 최근 연재글 */}
-      {writings.length > 0 && (
+      {/* 최근 연재글 (시리즈 제외) */}
+      {recentWritings.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-1">
             <h2 className="text-xs font-semibold tracking-widest text-gray-400 uppercase">Recent Writings</h2>
@@ -48,7 +80,7 @@ export default function HomePage() {
             </Link>
           </div>
           <div>
-            {writings.map((writing) => (
+            {recentWritings.map((writing) => (
               <WritingCard key={writing.slug} writing={writing} />
             ))}
           </div>
