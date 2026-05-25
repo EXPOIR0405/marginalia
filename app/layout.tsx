@@ -4,14 +4,14 @@ import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: {
-    default: "강민정의 서재",
-    template: "%s | 강민정의 서재",
+    default: "여백에 적힌 글(marginalia)",
+    template: "%s | 여백에 적힌 글(marginalia)",
   },
-  description: "읽은 책, 쓴 글, 그리고 생각들. 강민정의 작은 서재입니다.",
+  description: "주인장의 읽은 책, 쓴 글, 그리고 생각들. 여백에 적힌 글(marginalia)입니다.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    siteName: "강민정의 서재",
+    siteName: "여백에 적힌 글(marginalia)",
   },
 };
 

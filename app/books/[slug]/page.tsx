@@ -65,7 +65,7 @@ export default async function BookDetailPage({ params, searchParams }: Props) {
 
       {/* 책 헤더 */}
       <div className="flex gap-6 mb-10">
-        <BookCover isbn={book.isbn} title={book.title} size="lg" />
+        <BookCover isbn={book.isbn} title={book.title} author={book.author} size="lg" />
         <div className="flex-1">
           <h1 className="text-xl font-bold tracking-tight leading-snug mb-1">
             {book.title}

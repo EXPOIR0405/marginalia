@@ -19,7 +19,7 @@ export default function Header() {
           href="/"
           className="font-semibold text-[15px] tracking-tight hover:opacity-70 transition-opacity"
         >
-          강민정의 서재
+            강민정의 서재
         </Link>
         <nav className="flex items-center gap-6">
           {navItems.map(({ href, label }) => (

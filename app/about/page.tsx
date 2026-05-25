@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { getAllBooks, getAllTags } from "@/lib/mdx";
 
 export const metadata: Metadata = {
@@ -29,9 +30,18 @@ export default function AboutPage() {
 
       {/* 자기소개 */}
       <section className="mb-12">
-        <p className="text-[15px] leading-relaxed text-gray-700 mb-4">
-          안녕하세요, 강민정입니다.
-        </p>
+        <div className="flex items-center gap-5 mb-6">
+          <Image
+            src="/notion_img.png"
+            alt="강민정"
+            width={72}
+            height={72}
+            className="rounded-full object-cover w-[72px] h-[72px]"
+          />
+          <p className="text-[15px] leading-relaxed text-gray-700">
+            안녕하세요, 강민정입니다.
+          </p>
+        </div>
         <p className="text-[15px] leading-relaxed text-gray-600 mb-4">
           기획자로 일하고 있습니다. 좋은 서비스는 본질적인 문제를 정확히 정의하는 것에서 시작한다고 믿으며,
           사람들이 의미 있는 일에 집중할 수 있는 환경을 만드는 것에 관심이 많습니다.

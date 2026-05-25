@@ -17,7 +17,7 @@ function StarRating({ rating }: { rating: number }) {
 export default function BookCard({ book }: Props) {
   return (
     <Link href={`/books/${book.slug}`} className="group flex gap-4 py-5 border-b border-gray-100 hover:border-gray-200 transition-colors">
-      <BookCover isbn={book.isbn} title={book.title} size="md" />
+      <BookCover isbn={book.isbn} title={book.title} author={book.author} size="md" />
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2 mb-1">
           <h2 className="font-semibold text-[15px] leading-snug group-hover:opacity-70 transition-opacity line-clamp-1">

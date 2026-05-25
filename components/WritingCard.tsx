@@ -17,7 +17,7 @@ export default function WritingCard({ writing }: Props) {
         <h2 className="font-semibold text-[15px] leading-snug group-hover:opacity-70 transition-opacity">
           {writing.title}
         </h2>
-        <span className="text-xs text-gray-400 flex-shrink-0 mt-0.5">
+        <span className="text-xs text-gray-400 shrink-0 mt-0.5">
           {formatDate(writing.date)}
         </span>
       </div>

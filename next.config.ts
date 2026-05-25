@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "books.google.com",
       },
+      // Naver 책 이미지 CDN
+      {
+        protocol: "https",
+        hostname: "shopping-phinf.pstatic.net",
+      },
+      {
+        protocol: "https",
+        hostname: "bookthumb-phinf.pstatic.net",
+      },
     ],
   },
 };

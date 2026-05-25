@@ -11,11 +11,11 @@ export default function HomePage() {
     <div className="max-w-2xl mx-auto px-6 py-16">
       {/* 인트로 */}
       <section className="mb-16">
-        <p className="text-xs text-gray-400 mb-3 tracking-widest uppercase">Minjung&apos;s Library</p>
-        <h1 className="text-2xl font-bold tracking-tight mb-4">강민정의 서재</h1>
+        <p className="text-xs text-gray-400 mb-3 tracking-widest uppercase">Marginalia</p>
+        <h1 className="text-2xl font-bold tracking-tight mb-4">서재에 오신걸 환영합니다</h1>
         <p className="text-gray-500 leading-relaxed text-[15px]">
           읽은 책, 쓴 글, 그리고 그 사이에서 피어난 생각들을 모아두는 곳입니다.
-          책이 남긴 밑줄과 질문들, 그리고 때로는 책과 무관하게 흘러가는 글들을 이곳에 쌓아갑니다.
+          책이 남긴 밑줄과 질문들, 그리고 때로는 책과 무관하게 흘러가는 글들을 이곳에 쌓일 예정입니다.
         </p>
       </section>
 
