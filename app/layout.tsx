@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col text-[#111111] bg-white">
         <Header />
         <main className="flex-1">{children}</main>
+        <Analytics />
         <footer className="border-t border-gray-100 py-8 mt-16">
           <div className="max-w-2xl mx-auto px-6 text-center text-sm text-gray-400">
             © 2026 강민정의 서재
