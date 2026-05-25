@@ -101,3 +101,25 @@ body {
   border-top: 1px solid var(--border);
   margin: 2rem 0;
 }
+
+.prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.prose a:hover {
+  color: #93c5fd !important;
+  text-decoration-color: #93c5fd;
+}
+
+.prose img {
+  display: block;
+  margin: 2rem auto;
+  max-width: 55%;
+  max-height: 260px;
+  height: auto;
+  border-radius: 0.75rem;
+}

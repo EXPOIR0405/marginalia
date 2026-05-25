@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import FooterEasterEgg from "@/components/FooterEasterEgg";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
-    default: "여백에 적힌 글(marginalia)",
-    template: "%s | 여백에 적힌 글(marginalia)",
+    default: "강민정의 서재",
+    template: "%s | 강민정의 서재",
   },
-  description: "주인장의 읽은 책, 쓴 글, 그리고 생각들. 여백에 적힌 글(marginalia)입니다.",
+  description: "읽은 책, 쓴 글, 그리고 생각들. 강민정의 서재입니다.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    siteName: "여백에 적힌 글(marginalia)",
+    siteName: "강민정의 서재",
   },
 };
 
@@ -29,7 +30,7 @@ export default function RootLayout({
         <Analytics />
         <footer className="border-t border-gray-100 py-8 mt-16">
           <div className="max-w-2xl mx-auto px-6 text-center text-sm text-gray-400">
-            © 2026 강민정의 서재
+            <FooterEasterEgg />
           </div>
         </footer>
       </body>

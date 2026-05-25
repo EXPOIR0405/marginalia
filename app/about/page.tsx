@@ -4,7 +4,7 @@ import { getAllBooks, getAllTags } from "@/lib/mdx";
 
 export const metadata: Metadata = {
   title: "주인장",
-  description: "강민정에 대하여",
+  description: "주인장에 대한 소개 페이지입니다.",
 };
 
 export default function AboutPage() {
@@ -43,13 +43,19 @@ export default function AboutPage() {
           </p>
         </div>
         <p className="text-[15px] leading-relaxed text-gray-600 mb-4">
-          기획자로 일하고 있습니다. 좋은 서비스는 본질적인 문제를 정확히 정의하는 것에서 시작한다고 믿으며,
-          사람들이 의미 있는 일에 집중할 수 있는 환경을 만드는 것에 관심이 많습니다.
+          일하는 것, 바이브코딩, 스팀 게임 플레이까지 — 뭐든 재미있으면 일단 해보는 편이에요.
+          스스로를 둔재라고 생각하는데, 그 말인즉슨 한 번 읽어서는 잘 남지 않는다는 뜻이기도 합니다.
+          그래서 이 서재를 만들었어요. 읽고 나서 남긴 한 줄이, 어떤 분께는 작은 인사이트가 됐으면 하는 마음으로요.
+        </p>
+        <p className="text-[15px] leading-relaxed text-gray-600 mb-4">
+          현재 당근서비스에서 PM으로 일하고 있습니다.
+          좋은 서비스는 본질적인 문제를 정확히 정의하는 것에서 시작한다고 믿고,
+          사람들이 의미 있는 일에 집중할 수 있는 환경을 만드는 데 관심이 많아요.
         </p>
         <p className="text-[15px] leading-relaxed text-gray-600">
-          이 서재는 제가 읽은 책과 쓴 글을 모아두는 공간입니다.
-          책 한 권이 남긴 밑줄과 질문들, 그리고 그 사이에서 생겨난 생각들을 이곳에 기록합니다.
-          단순한 독후감이 아니라, 책이 나의 일과 삶에 어떻게 닿아 있는지를 함께 담으려 합니다.
+          여기까지 오셨다면 아마 주인장이 무슨 생각을 하는지 궁금하신 분이거나,
+          어쩌다 흘러들어오신 분일 텐데 — 어느 쪽이든 환영합니다.
+          아래 글들을 편하게 둘러봐 주세요 :)
         </p>
       </section>
 

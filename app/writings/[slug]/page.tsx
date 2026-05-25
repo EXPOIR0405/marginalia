@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getAllWritings, getWriting } from "@/lib/mdx";
+import { getAllWritings, getWriting, getSeriesNavigation } from "@/lib/mdx";
 import MdxContent from "@/components/MdxContent";
 
 type Props = {
@@ -37,6 +37,8 @@ export default async function WritingDetailPage({ params }: Props) {
   const writing = getWriting(slug);
   if (!writing) notFound();
 
+  const { prev, next } = getSeriesNavigation(slug);
+
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <Link
@@ -48,6 +50,12 @@ export default async function WritingDetailPage({ params }: Props) {
 
       {/* 글 헤더 */}
       <header className="mb-10">
+        {writing.series && (
+          <p className="text-xs text-indigo-400 font-medium mb-2">
+            {writing.series}
+            {writing.episode !== undefined && ` — EP.${writing.episode}`}
+          </p>
+        )}
         <div className="flex flex-wrap gap-1 mb-3">
           {writing.tags.map((tag) => (
             <span
@@ -68,6 +76,43 @@ export default async function WritingDetailPage({ params }: Props) {
       <article>
         <MdxContent source={writing.content} />
       </article>
+
+      {/* 시리즈 이전 / 다음 네비게이션 */}
+      {(prev || next) && (
+        <nav className="mt-16 pt-8 border-t border-gray-100 flex items-center justify-between gap-4">
+          <div className="flex-1">
+            {prev && (
+              <Link
+                href={`/writings/${prev.slug}`}
+                className="group flex flex-col gap-1 text-left"
+              >
+                <span className="text-xs text-gray-300 group-hover:text-blue-300 transition-colors">
+                  ← 이전 글
+                </span>
+                <span className="text-sm font-medium text-gray-500 group-hover:text-blue-300 transition-colors line-clamp-1">
+                  {prev.title.replace(/.*— /, "")}
+                </span>
+              </Link>
+            )}
+          </div>
+
+          <div className="flex-1 text-right">
+            {next && (
+              <Link
+                href={`/writings/${next.slug}`}
+                className="group flex flex-col gap-1 items-end"
+              >
+                <span className="text-xs text-gray-300 group-hover:text-blue-300 transition-colors">
+                  다음 글 →
+                </span>
+                <span className="text-sm font-medium text-gray-500 group-hover:text-blue-300 transition-colors line-clamp-1">
+                  {next.title.replace(/.*— /, "")}
+                </span>
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

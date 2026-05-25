@@ -30,6 +30,9 @@ export type WritingMeta = {
   date: string;
   tags: string[];
   excerpt: string;
+  image?: string;    // 썸네일 이미지 경로 (public/ 기준)
+  series?: string;   // 연재 시리즈 이름
+  episode?: number;  // 시리즈 내 순서
 };
 
 export type Writing = WritingMeta & {
@@ -115,6 +118,29 @@ export function getAllWritings(): WritingMeta[] {
   );
 }
 
+export type SeriesNav = {
+  prev: WritingMeta | null;
+  next: WritingMeta | null;
+};
+
+export function getSeriesNavigation(slug: string): SeriesNav {
+  const all = getAllWritings();
+  const current = all.find((w) => w.slug === slug);
+
+  if (!current?.series) return { prev: null, next: null };
+
+  const seriesWritings = all
+    .filter((w) => w.series === current.series && w.episode !== undefined)
+    .sort((a, b) => (a.episode ?? 0) - (b.episode ?? 0));
+
+  const idx = seriesWritings.findIndex((w) => w.slug === slug);
+
+  return {
+    prev: idx > 0 ? seriesWritings[idx - 1] : null,
+    next: idx < seriesWritings.length - 1 ? seriesWritings[idx + 1] : null,
+  };
+}
+
 export function getWriting(slug: string): Writing | null {
   const writingsDir = path.join(contentDir, "writings");
   const mdxPath = path.join(writingsDir, `${slug}.mdx`);
@@ -132,4 +158,54 @@ export function getWriting(slug: string): Writing | null {
 export function getBookCoverUrl(isbn?: string): string | null {
   if (!isbn) return null;
   return `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+}
+
+// ─── 게임 리뷰 ────────────────────────────────────────────────
+
+export type GameMeta = {
+  slug: string;
+  title: string;
+  date: string;
+  platform: string;   // PC, Switch, PS5 등
+  genre: string;
+  rating: number;     // 1~5
+  excerpt: string;
+  recommend: boolean;
+  image?: string;     // 썸네일 이미지 경로 (public/ 기준)
+};
+
+export type Game = GameMeta & {
+  content: string;
+};
+
+export function getAllGames(): GameMeta[] {
+  const gamesDir = path.join(contentDir, "games");
+  if (!fs.existsSync(gamesDir)) return [];
+
+  const files = fs
+    .readdirSync(gamesDir)
+    .filter((f) => f.endsWith(".mdx") || f.endsWith(".md"));
+
+  const games = files.map((file) => {
+    const slug = file.replace(/\.(mdx|md)$/, "");
+    const raw = fs.readFileSync(path.join(gamesDir, file), "utf-8");
+    const { data } = matter(raw);
+    return { slug, ...data } as GameMeta;
+  });
+
+  return games.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+}
+
+export function getGame(slug: string): Game | null {
+  const gamesDir = path.join(contentDir, "games");
+  const mdxPath = path.join(gamesDir, `${slug}.mdx`);
+  const mdPath = path.join(gamesDir, `${slug}.md`);
+  const filePath = fs.existsSync(mdxPath) ? mdxPath : mdPath;
+  if (!fs.existsSync(filePath)) return null;
+
+  const raw = fs.readFileSync(filePath, "utf-8");
+  const { data, content } = matter(raw);
+  return { slug, ...data, content } as Game;
 }
