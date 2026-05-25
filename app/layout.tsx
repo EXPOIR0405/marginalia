@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import FooterEasterEgg from "@/components/FooterEasterEgg";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: {
@@ -28,6 +29,12 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Analytics />
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="4ff28d89-37d8-46ef-9011-2c2182554864"
+          strategy="afterInteractive"
+        />
         <footer className="border-t border-gray-100 py-8 mt-16">
           <div className="max-w-2xl mx-auto px-6 text-center text-sm text-gray-400">
             <FooterEasterEgg />
