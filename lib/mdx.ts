@@ -153,6 +153,23 @@ export function getWriting(slug: string): Writing | null {
   return { slug, ...data, content } as Writing;
 }
 
+// ─── 읽기 예상 시간 ───────────────────────────────────────────
+
+/** MDX/Markdown 문법을 걷어낸 뒤 글자 수 기반으로 읽기 시간 계산
+ *  한국어 평균 독서 속도: 분당 약 500자
+ */
+export function getReadingTime(content: string): number {
+  const stripped = content
+    .replace(/```[\s\S]*?```/g, "")   // 코드 블록 제거
+    .replace(/`[^`]+`/g, "")          // 인라인 코드 제거
+    .replace(/!\[.*?\]\(.*?\)/g, "")  // 이미지 제거
+    .replace(/\[.*?\]\(.*?\)/g, "")   // 링크 텍스트만 남기기
+    .replace(/#+\s/g, "")             // 헤딩 마커 제거
+    .replace(/[*_~>|-]/g, "")         // 마크다운 기호 제거
+    .replace(/\s+/g, "");             // 공백 제거 후 순수 글자 수
+  return Math.max(1, Math.ceil(stripped.length / 500));
+}
+
 // ─── 책 표지 URL ──────────────────────────────────────────────
 
 export function getBookCoverUrl(isbn?: string): string | null {

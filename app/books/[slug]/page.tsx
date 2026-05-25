@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getAllBooks, getBook, getRelatedBooks } from "@/lib/mdx";
+import { getAllBooks, getBook, getRelatedBooks, getReadingTime } from "@/lib/mdx";
 import BookCover from "@/components/BookCover";
 import BookAuthor from "@/components/BookAuthor";
 import BookCard from "@/components/BookCard";
 import MdxContent from "@/components/MdxContent";
+import ShareButton from "@/components/ShareButton";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -56,13 +57,16 @@ export default async function BookDetailPage({ params, searchParams }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
-      {/* 뒤로가기 */}
-      <Link
-        href="/books"
-        className="text-xs text-gray-400 hover:text-gray-700 transition-colors mb-8 inline-block"
-      >
-        ← 서재로
-      </Link>
+      {/* 뒤로가기 + 공유 */}
+      <div className="flex items-center justify-between mb-8">
+        <Link
+          href="/books"
+          className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
+        >
+          ← 서재로
+        </Link>
+        <ShareButton />
+      </div>
 
       {/* 책 헤더 */}
       <div className="flex gap-6 mb-10">
@@ -90,7 +94,17 @@ export default async function BookDetailPage({ params, searchParams }: Props) {
               </Link>
             ))}
           </div>
-          <p className="text-xs text-gray-300 mt-3">{formatDate(book.readDate)} 읽음</p>
+          <p className="text-xs mt-3 flex flex-wrap items-center gap-x-2">
+            <span className="text-gray-300">{formatDate(book.readDate)} 읽음</span>
+            <span className="text-gray-200">·</span>
+            <span className="text-gray-500">노트 약 {getReadingTime(book.content)}분</span>
+            {book.essayContent && (
+              <>
+                <span className="text-gray-200">·</span>
+                <span className="text-gray-500">에세이 약 {getReadingTime(book.essayContent)}분</span>
+              </>
+            )}
+          </p>
         </div>
       </div>
 

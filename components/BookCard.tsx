@@ -8,8 +8,9 @@ type Props = {
 
 function StarRating({ rating }: { rating: number }) {
   return (
-    <span className="text-xs text-gray-400">
-      {"★".repeat(rating)}{"☆".repeat(5 - rating)}
+    <span className="text-xs">
+      <span className="text-amber-400">{"★".repeat(rating)}</span>
+      <span className="text-gray-200">{"★".repeat(5 - rating)}</span>
     </span>
   );
 }

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getAllWritings, getWriting, getSeriesNavigation } from "@/lib/mdx";
+import { getAllWritings, getWriting, getSeriesNavigation, getReadingTime } from "@/lib/mdx";
 import MdxContent from "@/components/MdxContent";
+import ShareButton from "@/components/ShareButton";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -41,12 +42,16 @@ export default async function WritingDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
-      <Link
-        href="/writings"
-        className="text-xs text-gray-400 hover:text-gray-700 transition-colors mb-8 inline-block"
-      >
-        ← 연재로
-      </Link>
+      {/* 뒤로가기 + 공유 */}
+      <div className="flex items-center justify-between mb-8">
+        <Link
+          href="/writings"
+          className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
+        >
+          ← 연재로
+        </Link>
+        <ShareButton />
+      </div>
 
       {/* 글 헤더 */}
       <header className="mb-10">
@@ -69,7 +74,11 @@ export default async function WritingDetailPage({ params }: Props) {
         <h1 className="text-2xl font-bold tracking-tight leading-snug mb-3">
           {writing.title}
         </h1>
-        <p className="text-xs text-gray-400">{formatDate(writing.date)}</p>
+        <p className="text-xs flex flex-wrap items-center gap-x-2">
+          <span className="text-gray-400">{formatDate(writing.date)}</span>
+          <span className="text-gray-200">·</span>
+          <span className="text-gray-500">약 {getReadingTime(writing.content)}분</span>
+        </p>
       </header>
 
       {/* 본문 */}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { getAllBooks, getAllTags } from "@/lib/mdx";
+import ReadingHeatmap from "@/components/ReadingHeatmap";
 
 export const metadata: Metadata = {
   title: "주인장",
@@ -96,6 +97,9 @@ export default function AboutPage() {
           </div>
         )}
       </section>
+
+      {/* 독서 잔디 */}
+      <ReadingHeatmap />
 
       {/* 연락 */}
       <section>
