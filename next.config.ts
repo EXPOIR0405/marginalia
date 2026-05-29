@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "bookthumb-phinf.pstatic.net",
       },
+      // Supabase Storage
+      {
+        protocol: "https",
+        hostname: "**.supabase.co",
+      },
     ],
   },
 };

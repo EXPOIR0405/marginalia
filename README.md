@@ -42,9 +42,31 @@
 
 ---
 
+## 어드민
+
+`/admin`에서 비밀번호로 로그인하면 글을 직접 작성·저장할 수 있는 에디터가 열립니다.
+
+- **GitHub에 저장** — 작성한 글을 MDX 파일로 만들어 레포에 바로 커밋 → Vercel 자동 배포
+- **이미지 업로드** — Supabase Storage에 업로드 후 URL 삽입
+- **AI 다듬기** — GPT-4o가 초안을 작가 수준으로 재작성, 전후 비교 후 선택 적용
+- **소재 추천** — 연재 시리즈 맥락에 맞는 다음 글 소재 5개 제안
+- **문장 제안** (ON/OFF 토글) — 타이핑 멈춘 뒤 4초 후 다음 문장 1개 자동 제안
+
+어드민 관련 환경변수:
+
+```
+ADMIN_PASSWORD=        # 로그인 비밀번호
+GITHUB_TOKEN=          # Fine-grained PAT (Contents: Read and write)
+SUPABASE_URL=          # Supabase 프로젝트 URL
+SUPABASE_SERVICE_ROLE_KEY=  # Supabase service_role 키
+OPENAI_API_KEY=        # AI 기능용 (다듬기·소재추천·문장제안)
+```
+
+---
+
 ## 콘텐츠 관리
 
-DB 없이 MDX 파일로만 관리합니다. 파일을 추가하고 GitHub에 push하면 Vercel이 자동으로 배포합니다.
+DB 없이 MDX 파일로만 관리합니다. 어드민에서 저장하거나 파일을 직접 추가하고 GitHub에 push하면 Vercel이 자동으로 배포합니다.
 
 ```
 content/
@@ -79,6 +101,9 @@ title: "글 제목"
 date: "2026-05-25"
 tags: ["태그"]
 excerpt: "한 줄 소개"
+series: "시리즈명"         # 선택
+episode: 4               # 선택, 시리즈 내 순서
+image: "https://..."     # 선택, 썸네일 이미지 URL
 ---
 ```
 
@@ -94,6 +119,9 @@ excerpt: "한 줄 소개"
 | 폰트 | Pretendard |
 | 콘텐츠 | MDX + gray-matter + remark-gfm |
 | 책 표지 | Naver 책 API (제목+저자 자동 검색) |
+| 이미지 저장 | Supabase Storage |
+| AI | OpenAI GPT-4o / GPT-4o-mini |
+| 콘텐츠 배포 | GitHub API (MDX 파일 커밋) |
 | 통계 | Vercel Analytics |
 | 배포 | Vercel |
 
