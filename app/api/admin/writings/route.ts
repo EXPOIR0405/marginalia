@@ -55,5 +55,10 @@ export async function POST(req: Request) {
     )
   }
 
+  const hookUrl = process.env.VERCEL_DEPLOY_HOOK_URL
+  if (hookUrl) {
+    await fetch(hookUrl, { method: 'POST' }).catch(() => null)
+  }
+
   return NextResponse.json({ ok: true, path })
 }
