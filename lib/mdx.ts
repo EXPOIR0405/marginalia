@@ -33,6 +33,7 @@ export type WritingMeta = {
   image?: string;    // 썸네일 이미지 경로 (public/ 기준)
   series?: string;   // 연재 시리즈 이름
   episode?: number;  // 시리즈 내 순서
+  draft?: boolean;   // true면 목록에서 숨김
 };
 
 export type Writing = WritingMeta & {
@@ -130,16 +131,23 @@ export function getAllWritings(): WritingMeta[] {
     .readdirSync(writingsDir)
     .filter((f) => f.endsWith(".mdx") || f.endsWith(".md"));
 
-  const writings = files.map((file) => {
-    const slug = file.replace(/\.(mdx|md)$/, "");
-    const raw = fs.readFileSync(path.join(writingsDir, file), "utf-8");
-    const { data } = matter(raw);
-    return { slug, ...data } as WritingMeta;
-  });
+  const writings = files
+    .map((file) => {
+      const slug = file.replace(/\.(mdx|md)$/, "");
+      const raw = fs.readFileSync(path.join(writingsDir, file), "utf-8");
+      const { data } = matter(raw);
+      return { slug, ...data } as WritingMeta;
+    })
+    .filter((w) => !w.draft);
 
-  return writings.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  return writings.sort((a, b) => {
+    if (a.episode !== undefined && b.episode !== undefined) {
+      return a.episode - b.episode;
+    }
+    if (a.episode !== undefined) return -1;
+    if (b.episode !== undefined) return 1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 }
 
 export type SeriesNav = {
