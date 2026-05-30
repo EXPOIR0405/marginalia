@@ -42,7 +42,12 @@ export default function BookEditor() {
     setLoadingList(true)
     const res = await fetch('/api/admin/books')
     const data = await res.json()
-    if (res.ok) setLoadableBooks(data.books)
+    if (res.ok) {
+      setLoadableBooks(data.books)
+    } else {
+      setMessage({ type: 'error', text: data.error ?? '목록 불러오기 실패' })
+      setShowLoadModal(false)
+    }
     setLoadingList(false)
   }
 
@@ -94,6 +99,9 @@ export default function BookEditor() {
     })
     const data = await res.json()
     if (res.ok) {
+      // Fix: update SHAs so subsequent saves don't 422 with stale/missing SHA
+      setSha(data.sha ?? null)
+      setEssaySha(data.essaySha ?? null)
       setMessage({ type: 'success', text: `${sha ? '수정' : '저장'} 완료! GitHub에 커밋됐어요.` })
     } else {
       setMessage({ type: 'error', text: data.error ?? '저장 실패' })

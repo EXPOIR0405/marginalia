@@ -1,8 +1,15 @@
 # 강민정의 서재
 
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?style=flat-square&logo=tailwindcss)
+![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=flat-square&logo=vercel)
+
 읽은 책, 쓴 글, 그리고 그 사이에서 피어난 생각들을 모아두는 개인 아카이브입니다.
 
 책 한 권을 읽고 나면 노트를 남깁니다. 그 노트에서 뻗어나온 짧은 에세이를 씁니다. 책과 무관하게 정리하고 싶은 생각이 생기면 연재글로 올립니다. 생각에 대해 교류하고 싶으시다면 언제든지 이메일로 연락주세요 :)
+
+> 가져다 쓰실 거라면 Clone보단 **Fork**해서 사용해주세요. 마음에 드셨다면 ⭐ Star는 알아서!
 
 ---
 
@@ -139,11 +146,34 @@ components/
 ## 로컬 실행
 
 ```bash
-# 환경변수 설정 (.env.local)
-NAVER_CLIENT_ID=your_client_id
-NAVER_CLIENT_SECRET=your_client_secret
-
 npm install
 npm run dev
 # http://localhost:3000
+```
+
+`.env.local` 에 아래 환경변수를 설정해주세요.
+
+```
+# 책 표지 이미지 (Naver Developers에서 발급)
+NAVER_CLIENT_ID=
+NAVER_CLIENT_SECRET=
+
+# 어드민 로그인
+ADMIN_PASSWORD=
+
+# GitHub API — Fine-grained PAT (Contents: Read and write)
+GITHUB_TOKEN=
+
+# Supabase (이미지 업로드용)
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# OpenAI (AI 다듬기 · 소재 추천 · 문장 제안)
+OPENAI_API_KEY=
+
+# Vercel Deploy Hook (어드민 저장 시 자동 배포 — 선택)
+VERCEL_DEPLOY_HOOK_URL=
+
+# 사이트맵 기본 URL (선택, 기본값: https://kangminjeong-library.vercel.app)
+NEXT_PUBLIC_SITE_URL=
 ```

@@ -113,7 +113,12 @@ export default function WritingEditor() {
     setLoadingList(true)
     const res = await fetch('/api/admin/writings')
     const data = await res.json()
-    if (res.ok) setLoadableWritings(data.writings)
+    if (res.ok) {
+      setLoadableWritings(data.writings)
+    } else {
+      setMessage({ type: 'error', text: data.error ?? '목록 불러오기 실패' })
+      setShowLoadModal(false)
+    }
     setLoadingList(false)
   }
 
@@ -227,13 +232,9 @@ export default function WritingEditor() {
     const data = await res.json()
     if (res.ok) {
       const action = fileSha ? '수정' : '저장'
+      // Fix: always update SHA (was only done for new files, causing 409 on second update)
+      setFileSha(data.sha ?? fileSha)
       setMessage({ type: 'success', text: `${action} 완료! content/writings/${slug}.mdx 가 GitHub에 커밋됐어요.` })
-      if (!fileSha) {
-        // 새 글이면 sha 업데이트 (연속 저장 대비)
-        const reloaded = await fetch(`/api/admin/writings?slug=${slug}`)
-        const reloadedData = await reloaded.json()
-        if (reloaded.ok) setFileSha(reloadedData.sha)
-      }
     } else {
       setMessage({ type: 'error', text: data.error ?? '저장 실패' })
     }
