@@ -16,6 +16,7 @@ type Props = {
   monthLabels: MonthLabel[];
   totalBooks: number;
   totalWritings: number;
+  totalWeeks: number;
 };
 
 const CELL = "w-3 h-3 rounded-[2px]";
@@ -31,7 +32,7 @@ function cellColor(cell: Cell) {
   return cell.writings.length === 1 ? "bg-blue-300" : "bg-blue-500";
 }
 
-export default function ReadingHeatmapGrid({ weeks, monthLabels, totalBooks, totalWritings }: Props) {
+export default function ReadingHeatmapGrid({ weeks, monthLabels, totalBooks, totalWritings, totalWeeks }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function ReadingHeatmapGrid({ weeks, monthLabels, totalBooks, tot
     <>
       <div ref={scrollRef} className="overflow-x-auto pb-1">
         {/* 월 라벨 */}
-        <div className="relative h-4 mb-1" style={{ width: `${53 * COL_WIDTH}px` }}>
+        <div className="relative h-4 mb-1" style={{ width: `${totalWeeks * COL_WIDTH}px` }}>
           {monthLabels.map(({ col, label }) => (
             <span
               key={col}
@@ -57,7 +58,7 @@ export default function ReadingHeatmapGrid({ weeks, monthLabels, totalBooks, tot
         </div>
 
         {/* 잔디 그리드 */}
-        <div className="flex gap-[3px]" style={{ minWidth: `${53 * COL_WIDTH}px` }}>
+        <div className="flex gap-[3px]" style={{ minWidth: `${totalWeeks * COL_WIDTH}px` }}>
           {weeks.map((week, wi) => (
             <div key={wi} className="flex flex-col gap-[3px]">
               {week.map((day, d) => {

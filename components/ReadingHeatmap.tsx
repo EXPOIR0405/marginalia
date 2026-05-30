@@ -8,7 +8,7 @@ function toLocalDateStr(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-function buildHeatmap(): { weeks: Cell[][]; monthLabels: { col: number; label: string }[] } {
+function buildHeatmap(): { weeks: Cell[][]; monthLabels: { col: number; label: string }[]; totalWeeks: number } {
   const allBooks = getAllBooks();
   const allWritings = getAllWritings();
 
@@ -29,15 +29,16 @@ function buildHeatmap(): { weeks: Cell[][]; monthLabels: { col: number; label: s
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const start = new Date(today);
-  start.setDate(today.getDate() - 52 * 7);
-  start.setDate(start.getDate() - start.getDay());
+  const start = new Date(today.getFullYear(), 3, 1); // 4월 1일
+  start.setDate(start.getDate() - start.getDay()); // 해당 주 일요일로 맞춤
 
   const weeks: Cell[][] = [];
   const monthLabels: { col: number; label: string }[] = [];
   let lastMonth = -1;
 
-  for (let w = 0; w < 53; w++) {
+  const totalWeeks = Math.ceil((today.getTime() - start.getTime()) / (7 * 24 * 60 * 60 * 1000)) + 1;
+
+  for (let w = 0; w < totalWeeks; w++) {
     const week: Cell[] = [];
     for (let d = 0; d < 7; d++) {
       const date = new Date(start);
@@ -60,11 +61,11 @@ function buildHeatmap(): { weeks: Cell[][]; monthLabels: { col: number; label: s
     weeks.push(week);
   }
 
-  return { weeks, monthLabels };
+  return { weeks, monthLabels, totalWeeks };
 }
 
 export default function ReadingHeatmap() {
-  const { weeks, monthLabels } = buildHeatmap();
+  const { weeks, monthLabels, totalWeeks } = buildHeatmap();
   const totalBooks = getAllBooks().length;
   const totalWritings = getAllWritings().length;
 
@@ -78,6 +79,7 @@ export default function ReadingHeatmap() {
         monthLabels={monthLabels}
         totalBooks={totalBooks}
         totalWritings={totalWritings}
+        totalWeeks={totalWeeks}
       />
     </section>
   );
