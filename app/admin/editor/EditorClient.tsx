@@ -19,8 +19,16 @@ export default function EditorClient() {
   const [imageUrl, setImageUrl] = useState('')
   const [imageUploading, setImageUploading] = useState(false)
   const [content, setContent] = useState('')
+  const [draft, setDraft] = useState(false)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<Message | null>(null)
+
+  // 기존 글 불러오기
+  const [fileSha, setFileSha] = useState<string | null>(null)
+  const [showLoadModal, setShowLoadModal] = useState(false)
+  const [loadableWritings, setLoadableWritings] = useState<{ slug: string }[]>([])
+  const [loadingList, setLoadingList] = useState(false)
+  const [loadingFile, setLoadingFile] = useState(false)
 
   // AI 다듬기
   const [refining, setRefining] = useState(false)
@@ -83,6 +91,57 @@ export default function EditorClient() {
   function insertSuggestion() {
     setContent((prev) => prev + (prev.endsWith('\n') ? '' : '\n') + sentenceSuggestion)
     setSentenceSuggestion('')
+  }
+
+  function resetForm() {
+    setTitle('')
+    setSlug('')
+    setDate(new Date().toISOString().slice(0, 10))
+    setSeries(DEFAULT_SERIES)
+    setEpisode('')
+    setExcerpt('')
+    setTags('PM, 커리어')
+    setImageUrl('')
+    setContent('')
+    setDraft(false)
+    setFileSha(null)
+    setMessage(null)
+  }
+
+  async function handleOpenLoadModal() {
+    setShowLoadModal(true)
+    setLoadingList(true)
+    const res = await fetch('/api/admin/writings')
+    const data = await res.json()
+    if (res.ok) setLoadableWritings(data.writings)
+    setLoadingList(false)
+  }
+
+  async function handleLoadWriting(selectedSlug: string) {
+    setLoadingFile(true)
+    const res = await fetch(`/api/admin/writings?slug=${selectedSlug}`)
+    const data = await res.json()
+    if (!res.ok) {
+      setMessage({ type: 'error', text: '파일을 불러오지 못했어요.' })
+      setLoadingFile(false)
+      return
+    }
+
+    setSlug(selectedSlug)
+    setTitle(data.title ?? '')
+    setDate(data.date ?? new Date().toISOString().slice(0, 10))
+    setSeries(data.series ?? DEFAULT_SERIES)
+    setEpisode(data.episode !== undefined ? String(data.episode) : '')
+    setExcerpt(data.excerpt ?? '')
+    setTags((data.tags ?? []).join(', '))
+    setImageUrl(data.image ?? '')
+    setContent(data.content ?? '')
+    setDraft(data.draft ?? false)
+    setFileSha(data.sha)
+    setMessage(null)
+
+    setLoadingFile(false)
+    setShowLoadModal(false)
   }
 
   async function handleImageUpload(file: File) {
@@ -161,11 +220,20 @@ export default function EditorClient() {
         tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
         image: imageUrl || undefined,
         content,
+        draft: draft || undefined,
+        sha: fileSha || undefined,
       }),
     })
     const data = await res.json()
     if (res.ok) {
-      setMessage({ type: 'success', text: `저장 완료! content/writings/${slug}.mdx 가 GitHub에 커밋됐어요.` })
+      const action = fileSha ? '수정' : '저장'
+      setMessage({ type: 'success', text: `${action} 완료! content/writings/${slug}.mdx 가 GitHub에 커밋됐어요.` })
+      if (!fileSha) {
+        // 새 글이면 sha 업데이트 (연속 저장 대비)
+        const reloaded = await fetch(`/api/admin/writings?slug=${slug}`)
+        const reloadedData = await reloaded.json()
+        if (reloaded.ok) setFileSha(reloadedData.sha)
+      }
     } else {
       setMessage({ type: 'error', text: data.error ?? '저장 실패' })
     }
@@ -178,7 +246,9 @@ export default function EditorClient() {
       <div className="border-b border-gray-100 px-6 py-4 flex items-center justify-between shrink-0">
         <div>
           <p className="text-xs text-gray-400 tracking-widest uppercase">Admin</p>
-          <p className="text-sm font-semibold">새 글 쓰기</p>
+          <p className="text-sm font-semibold">
+            {fileSha ? `수정 중: ${slug}` : '새 글 쓰기'}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           {message && (
@@ -205,6 +275,20 @@ export default function EditorClient() {
             </button>
           </label>
           <div className="w-px h-5 bg-gray-100" />
+          {fileSha && (
+            <button
+              onClick={resetForm}
+              className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:border-gray-400 transition-colors"
+            >
+              새 글 쓰기
+            </button>
+          )}
+          <button
+            onClick={handleOpenLoadModal}
+            className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:border-gray-400 transition-colors"
+          >
+            기존 글 불러오기
+          </button>
           <button
             onClick={handleSuggestTopics}
             disabled={loadingTopics}
@@ -224,7 +308,7 @@ export default function EditorClient() {
             disabled={saving || refining}
             className="px-5 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
           >
-            {saving ? '저장 중...' : 'GitHub에 저장'}
+            {saving ? '저장 중...' : fileSha ? 'GitHub에 수정' : 'GitHub에 저장'}
           </button>
         </div>
       </div>
@@ -266,6 +350,19 @@ export default function EditorClient() {
                 {imageUploading ? '업로드 중...' : '클릭해서 이미지 선택'}
               </button>
             )}
+          </Field>
+          <Field label="임시 숨김 (draft)">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <button
+                role="switch"
+                aria-checked={draft}
+                onClick={() => setDraft((v) => !v)}
+                className={`relative w-9 h-5 rounded-full transition-colors ${draft ? 'bg-amber-400' : 'bg-gray-200'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${draft ? 'translate-x-4' : 'translate-x-0'}`} />
+              </button>
+              <span className="text-xs text-gray-500">{draft ? '목록에서 숨김' : '공개'}</span>
+            </label>
           </Field>
         </aside>
 
@@ -312,6 +409,42 @@ export default function EditorClient() {
           </div>
         </div>
       </div>
+
+      {/* 기존 글 불러오기 모달 */}
+      {showLoadModal && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-6">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold">기존 글 불러오기</p>
+                <p className="text-xs text-gray-400 mt-0.5">불러오면 현재 작성 중인 내용이 교체돼요</p>
+              </div>
+              <button onClick={() => setShowLoadModal(false)} className="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+            </div>
+            <div className="p-4">
+              {loadingList ? (
+                <div className="py-10 text-center text-sm text-gray-400">목록 불러오는 중...</div>
+              ) : loadingFile ? (
+                <div className="py-10 text-center text-sm text-gray-400">파일 불러오는 중...</div>
+              ) : loadableWritings.length === 0 ? (
+                <div className="py-10 text-center text-sm text-gray-400">글이 없어요</div>
+              ) : (
+                <div className="space-y-1">
+                  {loadableWritings.map((w) => (
+                    <button
+                      key={w.slug}
+                      onClick={() => handleLoadWriting(w.slug)}
+                      className="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                    >
+                      <p className="text-sm font-mono text-gray-700 group-hover:text-gray-900">{w.slug}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 소재 추천 모달 */}
       {showTopics && (
