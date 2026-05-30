@@ -33,6 +33,7 @@ export default function RootLayout({
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="4ff28d89-37d8-46ef-9011-2c2182554864"
+          data-domains="marginalia-seven.vercel.app"
           strategy="afterInteractive"
         />
         <footer className="border-t border-gray-100 py-8 mt-16">
