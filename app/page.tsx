@@ -10,7 +10,7 @@ export default function HomePage() {
   // 주니어 PM 시리즈 고정 노출
   const featuredSeries = allWritings
     .filter((w) => w.series === "주니어 PM으로 살아남기")
-    .sort((a, b) => (a.episode ?? 0) - (b.episode ?? 0))
+    .sort((a, b) => (b.episode ?? 0) - (a.episode ?? 0))
     .slice(0, 3);
 
   // 시리즈 글 제외한 최근 연재
