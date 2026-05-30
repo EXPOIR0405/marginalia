@@ -84,12 +84,14 @@ export default async function WritingDetailPage({ params }: Props) {
 
       {/* 썸네일 */}
       {writing.image && (
-        <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-10">
+        <div className="w-full rounded-xl overflow-hidden mb-10">
           <Image
             src={writing.image}
             alt={writing.title}
-            fill
-            className="object-cover"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="w-full h-auto"
             priority
           />
         </div>
