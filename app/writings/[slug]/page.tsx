@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getAllWritings, getWriting, getSeriesNavigation, getReadingTime } from "@/lib/mdx";
 import MdxContent from "@/components/MdxContent";
 import ShareButton from "@/components/ShareButton";
@@ -80,6 +81,19 @@ export default async function WritingDetailPage({ params }: Props) {
           <span className="text-gray-500">약 {getReadingTime(writing.content)}분</span>
         </p>
       </header>
+
+      {/* 썸네일 */}
+      {writing.image && (
+        <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-10">
+          <Image
+            src={writing.image}
+            alt={writing.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
 
       {/* 본문 */}
       <article>
